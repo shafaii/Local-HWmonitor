@@ -2,5 +2,7 @@
   "name": "PC Sentinel",
   "description": "Windows hardware monitoring and AI-assisted diagnostic workstation application with real-time telemetry and normalized sensor architecture.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

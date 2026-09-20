@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -12,6 +12,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcSentinel.Infrastructure", "src\PcSentinel.Infrastructure\PcSentinel.Infrastructure.csproj", "{11DDD8BB-DADC-49DD-ACD0-DA1CA3F16795}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcSentinel.AI", "src\PcSentinel.AI\PcSentinel.AI.csproj", "{C81AAE73-C035-4981-96AE-E041AE3B2BC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcSentinel.App", "src\PcSentinel.App\PcSentinel.App.csproj", "{47E8B83A-3E3F-4183-B9E4-1E4E7BF67CA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcSentinel.Cli", "src\PcSentinel.Cli\PcSentinel.Cli.csproj", "{4B5A5C22-126A-47BE-A656-62A8D9F241C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcSentinel.Core.Tests", "tests\PcSentinel.Core.Tests\PcSentinel.Core.Tests.csproj", "{A998CEBF-801C-43F9-B172-06DB13078519}"
 EndProject
@@ -110,5 +114,7 @@ Global
 		{C81AAE73-C035-4981-96AE-E041AE3B2BC5} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{A998CEBF-801C-43F9-B172-06DB13078519} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{A4E21BFE-8E1C-4406-99AF-B0086C845AF1} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{47E8B83A-3E3F-4183-B9E4-1E4E7BF67CA3} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{4B5A5C22-126A-47BE-A656-62A8D9F241C9} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal
