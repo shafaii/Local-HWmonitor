@@ -14,6 +14,7 @@
     <WindowsAppSDKSelfContained Condition="'$(WindowsAppSDKSelfContained)'==''">true</WindowsAppSDKSelfContained>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

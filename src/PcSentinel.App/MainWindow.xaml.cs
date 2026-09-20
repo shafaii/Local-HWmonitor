@@ -16,17 +16,6 @@ public sealed partial class MainWindow : Window
         ViewModel = App.Services.GetRequiredService<MainViewModel>();
         InitializeComponent();
 
-        // Set custom titlebar if supported
-        try
-        {
-            ExtendsContentIntoTitleBar = true;
-            SetTitleBar(AppTitleBar);
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"Titlebar customization skipped: {ex.Message}");
-        }
-
         // Default navigation
         ContentFrame.Navigate(typeof(DashboardPage));
 

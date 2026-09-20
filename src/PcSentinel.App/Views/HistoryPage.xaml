@@ -164,15 +164,11 @@
                                 <Line X1="0" Y1="130" X2="800" Y2="130" Stroke="#242426" StrokeDashArray="2,2" HorizontalAlignment="Stretch" />
                                 <Line X1="0" Y1="240" X2="800" Y2="240" Stroke="#242426" StrokeDashArray="2,2" HorizontalAlignment="Stretch" />
 
-                                <!-- Scaled Polyline Vector -->
-                                <Viewbox Stretch="Fill" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                    <Canvas Width="800" Height="260">
-                                        <!-- Shaded Area -->
-                                        <Polygon Points="{x:Bind ViewModel.GraphAreaPoints, Mode=OneWay}" Fill="#1A0078D4" />
-                                        <!-- Main Line -->
-                                        <Polyline Points="{x:Bind ViewModel.GraphPoints, Mode=OneWay}" Stroke="#0078D4" StrokeThickness="2.5" StrokeLineJoin="Round" />
-                                    </Canvas>
-                                </Viewbox>
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8">
+                                    <FontIcon Glyph="&#xE9D2;" FontSize="28" Foreground="#0078D4" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{x:Bind ViewModel.SampleCountText, Mode=OneWay}" FontSize="13" Foreground="#CCCCCC" HorizontalAlignment="Center" />
+                                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" FontSize="11" Foreground="#8A8886" HorizontalAlignment="Center" />
+                                </StackPanel>
                             </Grid>
                         </Border>
                     </Grid>

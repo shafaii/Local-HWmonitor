@@ -53,7 +53,7 @@
             IsSettingsVisible="False"
             SelectionChanged="NavView_SelectionChanged">
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="Dashboard" Tag="Dashboard" Icon="Home" IsSelected="True" />
+                <NavigationViewItem Content="Dashboard" Tag="Dashboard" Icon="Home" />
                 <NavigationViewItem Content="Hardware" Tag="Hardware" Icon="Map" />
                 <NavigationViewItem Content="History" Tag="History" Icon="Clock" />
                 <NavigationViewItem Content="Diagnostics" Tag="Diagnostics" Icon="Help" />

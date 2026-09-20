@@ -66,11 +66,11 @@
                         </Grid>
                         <ProgressBar Value="{x:Bind ViewModel.CpuCard.PrimaryPercentage, Mode=OneWay}" Maximum="100" Height="4" Foreground="#0078D4" Background="#333333" />
 
-                        <!-- Live CPU Sparkline -->
-                        <Border Background="#181818" CornerRadius="4" Padding="4" Height="40">
+                        <!-- Live CPU Info -->
+                        <Border Background="#181818" CornerRadius="4" Padding="8,4" Height="32">
                             <Grid>
-                                <Polyline Points="{x:Bind ViewModel.CpuCard.SparklinePoints, Mode=OneWay}" Stroke="#0078D4" StrokeThickness="1.5" />
-                                <TextBlock Text="{x:Bind ViewModel.CpuCard.SparklineMinMaxText, Mode=OneWay}" FontSize="9" Foreground="#666666" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                <TextBlock Text="{x:Bind ViewModel.CpuCard.ClockText, Mode=OneWay}" FontSize="11" Foreground="#CCCCCC" VerticalAlignment="Center" />
+                                <TextBlock Text="{x:Bind ViewModel.CpuCard.SparklineMinMaxText, Mode=OneWay}" FontSize="10" Foreground="#8A8886" HorizontalAlignment="Right" VerticalAlignment="Center" />
                             </Grid>
                         </Border>
 
@@ -106,11 +106,11 @@
                         </Grid>
                         <ProgressBar Value="{x:Bind ViewModel.GpuCard.PrimaryPercentage, Mode=OneWay}" Maximum="100" Height="4" Foreground="#107C41" Background="#333333" />
 
-                        <!-- Live GPU Sparkline -->
-                        <Border Background="#181818" CornerRadius="4" Padding="4" Height="40">
+                        <!-- Live GPU Info -->
+                        <Border Background="#181818" CornerRadius="4" Padding="8,4" Height="32">
                             <Grid>
-                                <Polyline Points="{x:Bind ViewModel.GpuCard.SparklinePoints, Mode=OneWay}" Stroke="#107C41" StrokeThickness="1.5" />
-                                <TextBlock Text="{x:Bind ViewModel.GpuCard.SparklineMinMaxText, Mode=OneWay}" FontSize="9" Foreground="#666666" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                <TextBlock Text="{x:Bind ViewModel.GpuCard.ClockText, Mode=OneWay}" FontSize="11" Foreground="#CCCCCC" VerticalAlignment="Center" />
+                                <TextBlock Text="{x:Bind ViewModel.GpuCard.SparklineMinMaxText, Mode=OneWay}" FontSize="10" Foreground="#8A8886" HorizontalAlignment="Right" VerticalAlignment="Center" />
                             </Grid>
                         </Border>
 
@@ -146,11 +146,11 @@
                         </Grid>
                         <ProgressBar Value="{x:Bind ViewModel.MemoryCard.PrimaryPercentage, Mode=OneWay}" Maximum="100" Height="4" Foreground="#FFB900" Background="#333333" />
 
-                        <!-- Live Memory Sparkline -->
-                        <Border Background="#181818" CornerRadius="4" Padding="4" Height="40">
+                        <!-- Live Memory Info -->
+                        <Border Background="#181818" CornerRadius="4" Padding="8,4" Height="32">
                             <Grid>
-                                <Polyline Points="{x:Bind ViewModel.MemoryCard.SparklinePoints, Mode=OneWay}" Stroke="#FFB900" StrokeThickness="1.5" />
-                                <TextBlock Text="{x:Bind ViewModel.MemoryCard.SparklineMinMaxText, Mode=OneWay}" FontSize="9" Foreground="#666666" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                <TextBlock Text="{x:Bind ViewModel.MemoryCard.ClockText, Mode=OneWay}" FontSize="11" Foreground="#CCCCCC" VerticalAlignment="Center" />
+                                <TextBlock Text="{x:Bind ViewModel.MemoryCard.SparklineMinMaxText, Mode=OneWay}" FontSize="10" Foreground="#8A8886" HorizontalAlignment="Right" VerticalAlignment="Center" />
                             </Grid>
                         </Border>
 
@@ -186,11 +186,11 @@
                         </Grid>
                         <ProgressBar Value="{x:Bind ViewModel.StorageCard.PrimaryPercentage, Mode=OneWay}" Maximum="100" Height="4" Foreground="#8764B8" Background="#333333" />
 
-                        <!-- Live Storage Sparkline -->
-                        <Border Background="#181818" CornerRadius="4" Padding="4" Height="40">
+                        <!-- Live Storage Info -->
+                        <Border Background="#181818" CornerRadius="4" Padding="8,4" Height="32">
                             <Grid>
-                                <Polyline Points="{x:Bind ViewModel.StorageCard.SparklinePoints, Mode=OneWay}" Stroke="#8764B8" StrokeThickness="1.5" />
-                                <TextBlock Text="{x:Bind ViewModel.StorageCard.SparklineMinMaxText, Mode=OneWay}" FontSize="9" Foreground="#666666" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                <TextBlock Text="{x:Bind ViewModel.StorageCard.ClockText, Mode=OneWay}" FontSize="11" Foreground="#CCCCCC" VerticalAlignment="Center" />
+                                <TextBlock Text="{x:Bind ViewModel.StorageCard.SparklineMinMaxText, Mode=OneWay}" FontSize="10" Foreground="#8A8886" HorizontalAlignment="Right" VerticalAlignment="Center" />
                             </Grid>
                         </Border>
 

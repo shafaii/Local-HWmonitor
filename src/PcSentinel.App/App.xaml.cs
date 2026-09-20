@@ -35,6 +35,12 @@ public partial class App : Application
 
     public App()
     {
+        UnhandledException += (s, e) =>
+        {
+            System.Diagnostics.Debug.WriteLine($"[PcSentinel.App] Global UnhandledException caught: {e.Message} - {e.Exception}");
+            e.Handled = true;
+        };
+
         InitializeComponent();
         Services = ConfigureServices();
     }
