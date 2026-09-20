@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>PcSentinel.Hardware</RootNamespace>
+    <AssemblyName>PcSentinel.Hardware</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PcSentinel.Core\PcSentinel.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
+  </ItemGroup>
+
+  <Target Name="CopyLibreHardwareMonitorRuntime" AfterTargets="Build">
+    <ItemGroup>
+      <_LhmRuntimeDll Include="$(NuGetPackageRoot)librehardwaremonitorlib/0.9.6/runtimes/win-x64/lib/net9.0/LibreHardwareMonitorLib.dll" Condition="Exists('$(NuGetPackageRoot)librehardwaremonitorlib/0.9.6/runtimes/win-x64/lib/net9.0/LibreHardwareMonitorLib.dll')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_LhmRuntimeDll)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

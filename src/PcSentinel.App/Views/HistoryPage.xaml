@@ -1,0 +1,199 @@
+<Page
+    x:Class="PcSentinel.App.Views.HistoryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:PcSentinel.App.ViewModels"
+    mc:Ignorable="d">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="20" Margin="0,0,16,24">
+
+            <!-- Header -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}" FontSize="24" FontWeight="SemiBold" Foreground="#FFFFFF" />
+                    <TextBlock Text="{x:Bind ViewModel.Description, Mode=OneWay}" FontSize="13" Foreground="#9E9E9E" />
+                </StackPanel>
+
+                <Button Grid.Column="1" Command="{x:Bind ViewModel.RefreshDataCommand}" Style="{ThemeResource AccentButtonStyle}" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon Glyph="&#xE72C;" FontSize="12" />
+                        <TextBlock Text="Query Telemetry" FontSize="12" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <!-- Selection Bar -->
+            <Border Background="#202020" CornerRadius="8" Padding="16" BorderBrush="#333333" BorderThickness="1">
+                <Grid ColumnSpacing="16" RowSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Hardware Selector -->
+                    <StackPanel Grid.Column="0" Spacing="6">
+                        <TextBlock Text="HARDWARE DEVICE" FontSize="11" FontWeight="Bold" Foreground="#8A8886" />
+                        <ComboBox
+                            HorizontalAlignment="Stretch"
+                            ItemsSource="{x:Bind ViewModel.Devices, Mode=OneWay}"
+                            SelectedItem="{x:Bind ViewModel.SelectedDevice, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Sensor Selector -->
+                    <StackPanel Grid.Column="1" Spacing="6">
+                        <TextBlock Text="SENSOR CHANNEL" FontSize="11" FontWeight="Bold" Foreground="#8A8886" />
+                        <ComboBox
+                            HorizontalAlignment="Stretch"
+                            ItemsSource="{x:Bind ViewModel.Sensors, Mode=OneWay}"
+                            SelectedItem="{x:Bind ViewModel.SelectedSensor, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Medium" />
+                                        <TextBlock Text="{Binding Unit}" Foreground="#8A8886" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Time Range Selector -->
+                    <StackPanel Grid.Column="2" Spacing="6">
+                        <TextBlock Text="TIME WINDOW &amp; RESOLUTION" FontSize="11" FontWeight="Bold" Foreground="#8A8886" />
+                        <ComboBox
+                            HorizontalAlignment="Stretch"
+                            ItemsSource="{x:Bind ViewModel.TimeRangeOptions, Mode=OneWay}"
+                            SelectedItem="{x:Bind ViewModel.SelectedTimeRangeItem, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DisplayName}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 4 Statistical Summary Cards -->
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Current -->
+                <Border Grid.Column="0" Background="#202020" CornerRadius="8" Padding="14" BorderBrush="#333333" BorderThickness="1">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="CURRENT (LATEST)" FontSize="10" FontWeight="Bold" Foreground="#8A8886" />
+                        <TextBlock Text="{x:Bind ViewModel.SummaryCurrent, Mode=OneWay}" FontSize="22" FontWeight="Bold" Foreground="#0078D4" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Average -->
+                <Border Grid.Column="1" Background="#202020" CornerRadius="8" Padding="14" BorderBrush="#333333" BorderThickness="1">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="AVERAGE" FontSize="10" FontWeight="Bold" Foreground="#8A8886" />
+                        <TextBlock Text="{x:Bind ViewModel.SummaryAverage, Mode=OneWay}" FontSize="22" FontWeight="Bold" Foreground="#E0E0E0" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Min -->
+                <Border Grid.Column="2" Background="#202020" CornerRadius="8" Padding="14" BorderBrush="#333333" BorderThickness="1">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="MINIMUM" FontSize="10" FontWeight="Bold" Foreground="#8A8886" />
+                        <TextBlock Text="{x:Bind ViewModel.SummaryMin, Mode=OneWay}" FontSize="22" FontWeight="Bold" Foreground="#107C41" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Max -->
+                <Border Grid.Column="3" Background="#202020" CornerRadius="8" Padding="14" BorderBrush="#333333" BorderThickness="1">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="PEAK (MAXIMUM)" FontSize="10" FontWeight="Bold" Foreground="#8A8886" />
+                        <TextBlock Text="{x:Bind ViewModel.SummaryMax, Mode=OneWay}" FontSize="22" FontWeight="Bold" Foreground="#D83B01" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Historical Graph Canvas Container -->
+            <Border Background="#1C1C1C" CornerRadius="8" Padding="16" BorderBrush="#333333" BorderThickness="1">
+                <StackPanel Spacing="12">
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                            <TextBlock Text="{x:Bind ViewModel.SelectedSensor.Name, Mode=OneWay}" FontSize="14" FontWeight="SemiBold" Foreground="#FFFFFF" />
+                            <TextBlock Text="Timeline" FontSize="14" Foreground="#8A8886" />
+                        </StackPanel>
+                        <TextBlock Text="{x:Bind ViewModel.SampleCountText, Mode=OneWay}" HorizontalAlignment="Right" FontSize="12" Foreground="#8A8886" VerticalAlignment="Center" />
+                    </Grid>
+
+                    <!-- Graph Area with Y-Axis and Viewbox -->
+                    <Grid Height="280">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Y-Axis Labels -->
+                        <Grid Grid.Column="0" VerticalAlignment="Stretch" Margin="0,10,8,10">
+                            <TextBlock Text="{x:Bind ViewModel.YAxisTop, Mode=OneWay}" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="11" Foreground="#8A8886" />
+                            <TextBlock Text="{x:Bind ViewModel.YAxisMid, Mode=OneWay}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="11" Foreground="#666666" />
+                            <TextBlock Text="{x:Bind ViewModel.YAxisBottom, Mode=OneWay}" VerticalAlignment="Bottom" HorizontalAlignment="Right" FontSize="11" Foreground="#8A8886" />
+                        </Grid>
+
+                        <!-- Graph Canvas / Lines -->
+                        <Border Grid.Column="1" Background="#141414" CornerRadius="4" BorderBrush="#2D2D30" BorderThickness="1" Padding="8">
+                            <Grid>
+                                <!-- Horizontal Grid Lines -->
+                                <Line X1="0" Y1="20" X2="800" Y2="20" Stroke="#242426" StrokeDashArray="2,2" HorizontalAlignment="Stretch" />
+                                <Line X1="0" Y1="130" X2="800" Y2="130" Stroke="#242426" StrokeDashArray="2,2" HorizontalAlignment="Stretch" />
+                                <Line X1="0" Y1="240" X2="800" Y2="240" Stroke="#242426" StrokeDashArray="2,2" HorizontalAlignment="Stretch" />
+
+                                <!-- Scaled Polyline Vector -->
+                                <Viewbox Stretch="Fill" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                    <Canvas Width="800" Height="260">
+                                        <!-- Shaded Area -->
+                                        <Polygon Points="{x:Bind ViewModel.GraphAreaPoints, Mode=OneWay}" Fill="#1A0078D4" />
+                                        <!-- Main Line -->
+                                        <Polyline Points="{x:Bind ViewModel.GraphPoints, Mode=OneWay}" Stroke="#0078D4" StrokeThickness="2.5" StrokeLineJoin="Round" />
+                                    </Canvas>
+                                </Viewbox>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <!-- X-Axis Timeline Labels -->
+                    <Grid Margin="68,0,0,0">
+                        <TextBlock Text="{x:Bind ViewModel.XAxisStart, Mode=OneWay}" HorizontalAlignment="Left" FontSize="11" Foreground="#8A8886" />
+                        <TextBlock Text="Aggregated Time Range" HorizontalAlignment="Center" FontSize="11" Foreground="#555555" />
+                        <TextBlock Text="{x:Bind ViewModel.XAxisEnd, Mode=OneWay}" HorizontalAlignment="Right" FontSize="11" Foreground="#8A8886" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Status Ribbon -->
+            <Border Background="#202020" CornerRadius="6" Padding="12,8" BorderBrush="#2D2D30" BorderThickness="1">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon Glyph="&#xE946;" FontSize="12" Foreground="#0078D4" VerticalAlignment="Center" />
+                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" FontSize="12" Foreground="#A0A0A0" VerticalAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

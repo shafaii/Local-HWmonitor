@@ -1,0 +1,11 @@
+/app/applet/src/PcSentinel.Core/bin/Debug/net9.0/PcSentinel.Core.deps.json
+/app/applet/src/PcSentinel.Core/bin/Debug/net9.0/PcSentinel.Core.dll
+/app/applet/src/PcSentinel.Core/bin/Debug/net9.0/PcSentinel.Core.pdb
+/app/applet/src/PcSentinel.Core/obj/Debug/net9.0/PcSentinel.Core.GeneratedMSBuildEditorConfig.editorconfig
+/app/applet/src/PcSentinel.Core/obj/Debug/net9.0/PcSentinel.Core.AssemblyInfoInputs.cache
+/app/applet/src/PcSentinel.Core/obj/Debug/net9.0/PcSentinel.Core.AssemblyInfo.cs
+/app/applet/src/PcSentinel.Core/obj/Debug/net9.0/PcSentinel.Core.csproj.CoreCompileInputs.cache
+/app/applet/src/PcSentinel.Core/obj/Debug/net9.0/PcSentinel.Core.dll
+/app/applet/src/PcSentinel.Core/obj/Debug/net9.0/refint/PcSentinel.Core.dll
+/app/applet/src/PcSentinel.Core/obj/Debug/net9.0/PcSentinel.Core.pdb
+/app/applet/src/PcSentinel.Core/obj/Debug/net9.0/ref/PcSentinel.Core.dll

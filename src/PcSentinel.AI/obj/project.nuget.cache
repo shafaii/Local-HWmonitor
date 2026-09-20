@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "b953saHQrW8=",
+  "success": true,
+  "projectFilePath": "/app/applet/src/PcSentinel.AI/PcSentinel.AI.csproj",
+  "expectedPackageFiles": [
+    "/root/.nuget/packages/system.text.json/9.0.2/system.text.json.9.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

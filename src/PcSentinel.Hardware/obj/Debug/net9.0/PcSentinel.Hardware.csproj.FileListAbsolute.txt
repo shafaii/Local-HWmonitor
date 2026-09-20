@@ -1,0 +1,15 @@
+/app/applet/src/PcSentinel.Hardware/obj/Debug/net9.0/PcSentinel.Hardware.csproj.AssemblyReference.cache
+/app/applet/src/PcSentinel.Hardware/obj/Debug/net9.0/PcSentinel.Hardware.GeneratedMSBuildEditorConfig.editorconfig
+/app/applet/src/PcSentinel.Hardware/obj/Debug/net9.0/PcSentinel.Hardware.AssemblyInfoInputs.cache
+/app/applet/src/PcSentinel.Hardware/obj/Debug/net9.0/PcSentinel.Hardware.AssemblyInfo.cs
+/app/applet/src/PcSentinel.Hardware/obj/Debug/net9.0/PcSentinel.Hardware.csproj.CoreCompileInputs.cache
+/app/applet/src/PcSentinel.Hardware/bin/Debug/net9.0/PcSentinel.Hardware.deps.json
+/app/applet/src/PcSentinel.Hardware/bin/Debug/net9.0/PcSentinel.Hardware.dll
+/app/applet/src/PcSentinel.Hardware/bin/Debug/net9.0/PcSentinel.Hardware.pdb
+/app/applet/src/PcSentinel.Hardware/bin/Debug/net9.0/PcSentinel.Core.dll
+/app/applet/src/PcSentinel.Hardware/bin/Debug/net9.0/PcSentinel.Core.pdb
+/app/applet/src/PcSentinel.Hardware/obj/Debug/net9.0/PcSentin.F57E7133.Up2Date
+/app/applet/src/PcSentinel.Hardware/obj/Debug/net9.0/PcSentinel.Hardware.dll
+/app/applet/src/PcSentinel.Hardware/obj/Debug/net9.0/refint/PcSentinel.Hardware.dll
+/app/applet/src/PcSentinel.Hardware/obj/Debug/net9.0/PcSentinel.Hardware.pdb
+/app/applet/src/PcSentinel.Hardware/obj/Debug/net9.0/ref/PcSentinel.Hardware.dll

@@ -1,0 +1,140 @@
+<Page
+    x:Class="PcSentinel.App.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:PcSentinel.App.ViewModels"
+    mc:Ignorable="d">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="24" Margin="0,0,16,24">
+
+            <!-- Header -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}" FontSize="24" FontWeight="SemiBold" Foreground="#FFFFFF" />
+                <TextBlock Text="{x:Bind ViewModel.Description, Mode=OneWay}" FontSize="13" Foreground="#9E9E9E" />
+            </StackPanel>
+
+            <!-- Telemetry Polling Cadence -->
+            <Border Background="#202020" CornerRadius="8" Padding="20" BorderBrush="#333333" BorderThickness="1">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="HARDWARE POLLING ENGINE" FontSize="12" FontWeight="Bold" Foreground="#8A8886" />
+
+                    <Grid ColumnSpacing="20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="Sensor Polling Interval" FontSize="14" FontWeight="SemiBold" Foreground="#FFFFFF" />
+                            <TextBlock Text="Frequency at which LibreHardwareMonitor reads hardware sensors (Ring0 / WMI / SMBIOS)." FontSize="12" Foreground="#8A8886" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <ComboBox
+                            Grid.Column="1"
+                            Width="160"
+                            ItemsSource="{x:Bind ViewModel.PollingIntervalOptions, Mode=OneWay}"
+                            SelectedItem="{x:Bind ViewModel.SelectedPollingInterval, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ConverterParameter='{}0 ms'}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Data Retention & SQLite Storage -->
+            <Border Background="#202020" CornerRadius="8" Padding="20" BorderBrush="#333333" BorderThickness="1">
+                <StackPanel Spacing="20">
+                    <TextBlock Text="LOCAL TELEMETRY PERSISTENCE &amp; RETENTION" FontSize="12" FontWeight="Bold" Foreground="#8A8886" />
+
+                    <!-- Retention Selector -->
+                    <Grid ColumnSpacing="20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="Data Retention Period" FontSize="14" FontWeight="SemiBold" Foreground="#FFFFFF" />
+                            <TextBlock Text="Sensor readings older than this period will be automatically purged by the background retention worker." FontSize="12" Foreground="#8A8886" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <ComboBox
+                            Grid.Column="1"
+                            Width="180"
+                            ItemsSource="{x:Bind ViewModel.RetentionOptions, Mode=OneWay}"
+                            SelectedItem="{x:Bind ViewModel.SelectedRetention, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DisplayName}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+
+                    <MenuFlyoutSeparator />
+
+                    <!-- Database File & Stats -->
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="SQLite Database Diagnostics" FontSize="13" FontWeight="SemiBold" Foreground="#FFFFFF" />
+
+                        <Grid RowSpacing="8" ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Database File:" FontSize="12" Foreground="#8A8886" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{x:Bind ViewModel.DatabasePath, Mode=OneWay}" FontSize="12" Foreground="#CCCCCC" TextTrimming="CharacterEllipsis" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Stored Samples:" FontSize="12" Foreground="#8A8886" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind ViewModel.TotalStoredReadings, Mode=OneWay}" FontSize="12" FontWeight="SemiBold" Foreground="#0078D4" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Database Size:" FontSize="12" Foreground="#8A8886" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind ViewModel.DatabaseSizeFormatted, Mode=OneWay}" FontSize="12" Foreground="#CCCCCC" />
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Active Session ID:" FontSize="12" Foreground="#8A8886" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{x:Bind ViewModel.ActiveSessionId, Mode=OneWay}" FontSize="12" Foreground="#8A8886" />
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Command="{x:Bind ViewModel.RefreshStorageStatsCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon Glyph="&#xE72C;" FontSize="12" />
+                                <TextBlock Text="Refresh Storage Stats" FontSize="12" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Command="{x:Bind ViewModel.PurgeExpiredDataCommand}" Style="{ThemeResource AccentButtonStyle}">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon Glyph="&#xE74D;" FontSize="12" />
+                                <TextBlock Text="Run Retention Purge Now" FontSize="12" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Status Ribbon -->
+            <Border Background="#202020" CornerRadius="6" Padding="12,8" BorderBrush="#2D2D30" BorderThickness="1">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon Glyph="&#xE946;" FontSize="12" Foreground="#0078D4" VerticalAlignment="Center" />
+                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" FontSize="12" Foreground="#A0A0A0" VerticalAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

@@ -1,0 +1,15 @@
+/app/applet/src/PcSentinel.AI/bin/Debug/net9.0/PcSentinel.AI.deps.json
+/app/applet/src/PcSentinel.AI/bin/Debug/net9.0/PcSentinel.AI.dll
+/app/applet/src/PcSentinel.AI/bin/Debug/net9.0/PcSentinel.AI.pdb
+/app/applet/src/PcSentinel.AI/bin/Debug/net9.0/PcSentinel.Core.dll
+/app/applet/src/PcSentinel.AI/bin/Debug/net9.0/PcSentinel.Core.pdb
+/app/applet/src/PcSentinel.AI/obj/Debug/net9.0/PcSentinel.AI.csproj.AssemblyReference.cache
+/app/applet/src/PcSentinel.AI/obj/Debug/net9.0/PcSentinel.AI.GeneratedMSBuildEditorConfig.editorconfig
+/app/applet/src/PcSentinel.AI/obj/Debug/net9.0/PcSentinel.AI.AssemblyInfoInputs.cache
+/app/applet/src/PcSentinel.AI/obj/Debug/net9.0/PcSentinel.AI.AssemblyInfo.cs
+/app/applet/src/PcSentinel.AI/obj/Debug/net9.0/PcSentinel.AI.csproj.CoreCompileInputs.cache
+/app/applet/src/PcSentinel.AI/obj/Debug/net9.0/PcSentin.DB94A9FB.Up2Date
+/app/applet/src/PcSentinel.AI/obj/Debug/net9.0/PcSentinel.AI.dll
+/app/applet/src/PcSentinel.AI/obj/Debug/net9.0/refint/PcSentinel.AI.dll
+/app/applet/src/PcSentinel.AI/obj/Debug/net9.0/PcSentinel.AI.pdb
+/app/applet/src/PcSentinel.AI/obj/Debug/net9.0/ref/PcSentinel.AI.dll

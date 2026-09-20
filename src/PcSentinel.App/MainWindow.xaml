@@ -1,0 +1,69 @@
+<Window
+    x:Class="PcSentinel.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="using:PcSentinel.App.Views"
+    Title="PC Sentinel — Hardware Telemetry &amp; Diagnostics"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Custom Fluent App TitleBar -->
+        <Grid x:Name="AppTitleBar" Grid.Row="0" Background="#1E1E1E" Padding="16,0">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+                <FontIcon Glyph="&#xE950;" FontFamily="Segoe Fluent Icons" Foreground="#0078D4" FontSize="16" />
+                <TextBlock Text="PC Sentinel" FontWeight="SemiBold" FontSize="14" Foreground="#FFFFFF" VerticalAlignment="Center" />
+                <TextBlock Text="• Windows Telemetry Workstation" FontSize="12" Foreground="#8A8886" VerticalAlignment="Center" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Privilege & Telemetry Info Ribbon -->
+        <Border Grid.Row="1" Background="#252526" BorderBrush="#333337" BorderThickness="0,0,0,1" Padding="16,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <FontIcon Glyph="&#xE7BA;" FontFamily="Segoe Fluent Icons" Foreground="#107C41" FontSize="12" VerticalAlignment="Center" />
+                    <TextBlock x:Name="PrivilegeStatusText" Text="Hardware Discovery Active • Ring0 &amp; WMI Monitoring" FontSize="12" Foreground="#CCCCCC" VerticalAlignment="Center" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                    <TextBlock x:Name="RateIndicatorText" Text="Polling: 1000ms" FontSize="11" Foreground="#8A8886" VerticalAlignment="Center" />
+                    <TextBlock x:Name="StatusBadge" Text="NORMAL" FontSize="11" FontWeight="SemiBold" Foreground="#107C41" VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Navigation View -->
+        <NavigationView
+            x:Name="NavView"
+            Grid.Row="2"
+            PaneDisplayMode="Left"
+            IsBackButtonVisible="Collapsed"
+            IsSettingsVisible="False"
+            SelectionChanged="NavView_SelectionChanged">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="Dashboard" Tag="Dashboard" Icon="Home" IsSelected="True" />
+                <NavigationViewItem Content="Hardware" Tag="Hardware" Icon="Map" />
+                <NavigationViewItem Content="History" Tag="History" Icon="Clock" />
+                <NavigationViewItem Content="Diagnostics" Tag="Diagnostics" Icon="Help" />
+                <NavigationViewItem Content="Alerts" Tag="Alerts" Icon="ReportHacked" />
+            </NavigationView.MenuItems>
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="Settings" Tag="Settings" Icon="Setting" />
+            </NavigationView.FooterMenuItems>
+
+            <Frame x:Name="ContentFrame" Margin="16" />
+        </NavigationView>
+    </Grid>
+</Window>

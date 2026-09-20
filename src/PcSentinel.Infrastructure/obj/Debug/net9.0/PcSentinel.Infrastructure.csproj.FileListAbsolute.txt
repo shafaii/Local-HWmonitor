@@ -1,0 +1,15 @@
+/app/applet/src/PcSentinel.Infrastructure/obj/Debug/net9.0/PcSentinel.Infrastructure.csproj.AssemblyReference.cache
+/app/applet/src/PcSentinel.Infrastructure/obj/Debug/net9.0/PcSentinel.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/app/applet/src/PcSentinel.Infrastructure/obj/Debug/net9.0/PcSentinel.Infrastructure.AssemblyInfoInputs.cache
+/app/applet/src/PcSentinel.Infrastructure/obj/Debug/net9.0/PcSentinel.Infrastructure.AssemblyInfo.cs
+/app/applet/src/PcSentinel.Infrastructure/obj/Debug/net9.0/PcSentinel.Infrastructure.csproj.CoreCompileInputs.cache
+/app/applet/src/PcSentinel.Infrastructure/bin/Debug/net9.0/PcSentinel.Infrastructure.deps.json
+/app/applet/src/PcSentinel.Infrastructure/bin/Debug/net9.0/PcSentinel.Infrastructure.dll
+/app/applet/src/PcSentinel.Infrastructure/bin/Debug/net9.0/PcSentinel.Infrastructure.pdb
+/app/applet/src/PcSentinel.Infrastructure/bin/Debug/net9.0/PcSentinel.Core.dll
+/app/applet/src/PcSentinel.Infrastructure/bin/Debug/net9.0/PcSentinel.Core.pdb
+/app/applet/src/PcSentinel.Infrastructure/obj/Debug/net9.0/PcSentin.12504883.Up2Date
+/app/applet/src/PcSentinel.Infrastructure/obj/Debug/net9.0/PcSentinel.Infrastructure.dll
+/app/applet/src/PcSentinel.Infrastructure/obj/Debug/net9.0/refint/PcSentinel.Infrastructure.dll
+/app/applet/src/PcSentinel.Infrastructure/obj/Debug/net9.0/PcSentinel.Infrastructure.pdb
+/app/applet/src/PcSentinel.Infrastructure/obj/Debug/net9.0/ref/PcSentinel.Infrastructure.dll
