@@ -14,7 +14,24 @@ namespace PcSentinel.App;
 public partial class App : Application
 {
     public static IServiceProvider Services { get; private set; } = null!;
+    public static Microsoft.UI.Dispatching.DispatcherQueue? DispatcherQueue { get; private set; }
     private Window? _mainWindow;
+
+    public static void RunOnUIThread(Action action)
+    {
+        if (DispatcherQueue != null)
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                try { action(); }
+                catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"UI thread exception: {ex}"); }
+            });
+        }
+        else
+        {
+            action();
+        }
+    }
 
     public App()
     {
@@ -71,6 +88,14 @@ public partial class App : Application
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
+        DispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+
+        UnhandledException += (s, e) =>
+        {
+            System.Diagnostics.Debug.WriteLine($"[PcSentinel.App] Global UnhandledException caught: {e.Message}");
+            e.Handled = true;
+        };
+
         _mainWindow = new MainWindow();
         _mainWindow.Activate();
     }

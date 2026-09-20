@@ -37,7 +37,7 @@ public sealed partial class AlertsViewModel : ObservableObject
 
     private void OnObservationsDetected(object? sender, System.Collections.Generic.IReadOnlyList<TelemetryObservation> newObs)
     {
-        RefreshList();
+        App.RunOnUIThread(() => RefreshList());
     }
 
     [RelayCommand]

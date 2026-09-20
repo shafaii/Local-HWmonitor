@@ -27,18 +27,21 @@ public sealed partial class HardwareViewModel : ObservableObject
 
     private void OnTelemetryUpdated(object? sender, HardwareSnapshot snapshot)
     {
-        HardwareTree.Clear();
-        foreach (var hw in snapshot.Hardware)
+        App.RunOnUIThread(() =>
         {
-            HardwareTree.Add(hw);
-        }
+            HardwareTree.Clear();
+            foreach (var hw in snapshot.Hardware)
+            {
+                HardwareTree.Add(hw);
+            }
 
-        if (SelectedHardware == null && snapshot.Hardware.Count > 0)
-        {
-            SelectedHardware = snapshot.Hardware[0];
-        }
+            if (SelectedHardware == null && snapshot.Hardware.Count > 0)
+            {
+                SelectedHardware = snapshot.Hardware[0];
+            }
 
-        UpdateSelectedSensors();
+            UpdateSelectedSensors();
+        });
     }
 
     partial void OnSearchQueryChanged(string value)

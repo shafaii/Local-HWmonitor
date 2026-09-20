@@ -61,29 +61,32 @@ public sealed partial class DashboardViewModel : ObservableObject
 
     private void OnTelemetryUpdated(object? sender, HardwareSnapshot snapshot)
     {
-        // Update summary cards
-        UpdateCards(snapshot);
-
-        // Update health state
-        var health = SystemHealthState.Evaluate(snapshot);
-        SystemHealthStatus = health.OverallSeverity switch
+        App.RunOnUIThread(() =>
         {
-            HealthSeverity.Critical => "CRITICAL — Thermal or electrical limit reached",
-            HealthSeverity.Warning => "WARNING — Elevated temperatures detected",
-            HealthSeverity.Elevated => "ELEVATED — Moderate hardware stress",
-            _ => "Optimal — All sensors within nominal limits"
-        };
+            // Update summary cards
+            UpdateCards(snapshot);
 
-        LastUpdatedText = $"Live • {snapshot.Timestamp:HH:mm:ss} UTC (1000ms polling)";
+            // Update health state
+            var health = SystemHealthState.Evaluate(snapshot);
+            SystemHealthStatus = health.OverallSeverity switch
+            {
+                HealthSeverity.Critical => "CRITICAL — Thermal or electrical limit reached",
+                HealthSeverity.Warning => "WARNING — Elevated temperatures detected",
+                HealthSeverity.Elevated => "ELEVATED — Moderate hardware stress",
+                _ => "Optimal — All sensors within nominal limits"
+            };
 
-        // Cache sensors and refresh filtered collection
-        _allRawSensors.Clear();
-        _allRawSensors.AddRange(snapshot.AllSensors);
-        TotalSensorCount = _allRawSensors.Count;
+            LastUpdatedText = $"Live • {snapshot.Timestamp:HH:mm:ss} UTC (1000ms polling)";
 
-        ApplyFilter();
+            // Cache sensors and refresh filtered collection
+            _allRawSensors.Clear();
+            _allRawSensors.AddRange(snapshot.AllSensors);
+            TotalSensorCount = _allRawSensors.Count;
 
-        DiagnosticDigest = DiagnosticSnapshotBuilder.BuildTelemetryDigest(snapshot);
+            ApplyFilter();
+
+            DiagnosticDigest = DiagnosticSnapshotBuilder.BuildTelemetryDigest(snapshot);
+        });
     }
 
     private void UpdateCards(HardwareSnapshot snapshot)
