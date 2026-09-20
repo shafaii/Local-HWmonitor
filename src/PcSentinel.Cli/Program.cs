@@ -140,7 +140,7 @@ public class Program
         {
             await monitorService.StopAsync();
             monitorService.Dispose();
-            writer.Dispose();
+            await writer.DisposeAsync();
             repository.Dispose();
             Console.WriteLine("\nPC Sentinel CLI closed safely.");
         }
@@ -148,9 +148,9 @@ public class Program
 
     private static void RenderSnapshot(HardwareSnapshot snapshot)
     {
-        var cpuSensors = snapshot.Cpu?.Sensors ?? Array.Empty<Sensor>();
-        var gpuSensors = snapshot.Gpu?.Sensors ?? Array.Empty<Sensor>();
-        var memorySensors = snapshot.Memory?.Sensors ?? Array.Empty<Sensor>();
+        var cpuSensors = snapshot.Cpu?.Sensors ?? new System.Collections.Generic.List<Sensor>();
+        var gpuSensors = snapshot.Gpu?.Sensors ?? new System.Collections.Generic.List<Sensor>();
+        var memorySensors = snapshot.Memory?.Sensors ?? new System.Collections.Generic.List<Sensor>();
 
         var cpuTemp = cpuSensors.FirstOrDefault(s => s.SensorType == SensorType.Temperature && (s.SensorName.Contains("Package", StringComparison.OrdinalIgnoreCase) || s.SensorName.Contains("Core Max", StringComparison.OrdinalIgnoreCase) || s.SensorName.Contains("Tdie", StringComparison.OrdinalIgnoreCase)))?
             .FormattedValue ?? cpuSensors.FirstOrDefault(s => s.SensorType == SensorType.Temperature)?.FormattedValue ?? "—";
