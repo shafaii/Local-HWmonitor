@@ -10,7 +10,7 @@ public sealed partial class HardwarePage : Page
 
     public HardwarePage()
     {
-        InitializeComponent();
         ViewModel = App.Services.GetRequiredService<HardwareViewModel>();
+        InitializeComponent();
     }
 }

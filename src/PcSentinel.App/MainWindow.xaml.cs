@@ -13,8 +13,8 @@ public sealed partial class MainWindow : Window
 
     public MainWindow()
     {
-        InitializeComponent();
         ViewModel = App.Services.GetRequiredService<MainViewModel>();
+        InitializeComponent();
 
         // Set custom titlebar if supported
         try

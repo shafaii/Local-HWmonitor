@@ -11,8 +11,8 @@ public sealed partial class DashboardPage : Page
 
     public DashboardPage()
     {
-        InitializeComponent();
         ViewModel = App.Services.GetRequiredService<DashboardViewModel>();
+        InitializeComponent();
     }
 
     private void Filter_Click(object sender, RoutedEventArgs e)

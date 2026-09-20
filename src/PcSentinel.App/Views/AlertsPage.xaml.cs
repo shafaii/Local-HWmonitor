@@ -11,8 +11,8 @@ public sealed partial class AlertsPage : Page
 
     public AlertsPage()
     {
-        InitializeComponent();
         ViewModel = App.Services.GetRequiredService<AlertsViewModel>();
+        InitializeComponent();
     }
 
     protected override void OnNavigatedTo(NavigationEventArgs e)

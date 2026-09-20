@@ -11,8 +11,8 @@ public sealed partial class HistoryPage : Page
 
     public HistoryPage()
     {
-        InitializeComponent();
         ViewModel = App.Services.GetRequiredService<HistoryViewModel>();
+        InitializeComponent();
     }
 
     protected override async void OnNavigatedTo(NavigationEventArgs e)

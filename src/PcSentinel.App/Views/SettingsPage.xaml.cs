@@ -11,8 +11,8 @@ public sealed partial class SettingsPage : Page
 
     public SettingsPage()
     {
-        InitializeComponent();
         ViewModel = App.Services.GetRequiredService<SettingsViewModel>();
+        InitializeComponent();
     }
 
     protected override async void OnNavigatedTo(NavigationEventArgs e)
