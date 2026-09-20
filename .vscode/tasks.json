@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/PcSentinel.sln",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "run-cli",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}/src/PcSentinel.Cli/PcSentinel.Cli.csproj"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "run-app",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}/src/PcSentinel.App/PcSentinel.App.csproj"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "focus": true,
+        "panel": "shared"
+      }
+    }
+  ]
+}

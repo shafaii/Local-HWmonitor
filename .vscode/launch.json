@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "PC Sentinel (CLI Hardware Stream)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/PcSentinel.Cli/bin/Debug/net9.0/PcSentinel.Cli.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "PC Sentinel (WinUI 3 Desktop App)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/src/PcSentinel.App/bin/x64/Debug/net9.0-windows10.0.19041.0/PcSentinel.App.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/PcSentinel.App",
+      "stopAtEntry": false,
+      "console": "internalConsole"
+    }
+  ]
+}

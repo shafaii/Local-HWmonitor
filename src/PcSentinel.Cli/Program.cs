@@ -5,7 +5,7 @@ using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using PcSentinel.Core.Enums;
+using PcSentinel.Core.Interfaces;
 using PcSentinel.Core.Models;
 using PcSentinel.Core.Services;
 using PcSentinel.Hardware.Monitoring;
@@ -34,13 +34,13 @@ public class Program
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("[Elevation] Running standard user. Motherboard voltages and fan speeds may be restricted.");
-            Console.WriteLine("            For full sensor access, restart PowerShell as Administrator.");
+            Console.WriteLine("            For full sensor access, restart PowerShell or VS Code as Administrator.");
         }
         Console.ResetColor();
 
         // Prepare local SQLite database
         string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        string appFolder = Path.Combine(localAppData, "PCSentinel");
+        string appFolder = Path.Combine(localAppData, "PcSentinel");
         Directory.CreateDirectory(appFolder);
         string dbPath = Path.Combine(appFolder, "telemetry.db");
 
@@ -52,12 +52,6 @@ public class Program
 
         var logger = loggerFactory.CreateLogger<HardwareMonitorService>();
         var repository = new SqliteTelemetryRepository(dbPath);
-        var trendAnalyzer = new TrendAnalyzer();
-
-        Console.WriteLine($"[Database] Local SQLite storage ready: {dbPath}");
-        Console.WriteLine("[Discovery] Initializing LibreHardwareMonitorLib hardware detection...");
-
-        var monitorService = new HardwareMonitorService(logger);
 
         var cancellationTokenSource = new CancellationTokenSource();
         Console.CancelKeyPress += (sender, eventArgs) =>
@@ -66,29 +60,48 @@ public class Program
             cancellationTokenSource.Cancel();
         };
 
+        try
+        {
+            await repository.InitializeAsync(cancellationTokenSource.Token);
+            Console.WriteLine($"[Database] Local SQLite storage ready: {dbPath}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Database] Running in-memory mode: {ex.Message}");
+        }
+
+        var writer = new ChannelTelemetryWriter(repository);
+        var trendAnalyzer = new TrendAnalyzer();
+
+        Console.WriteLine("[Discovery] Initializing LibreHardwareMonitorLib hardware detection...");
+
+        var monitorService = new HardwareMonitorService(
+            options: new HardwareMonitorOptions { DefaultPollingInterval = TimeSpan.FromSeconds(1) },
+            telemetryWriter: writer,
+            trendAnalyzer: trendAnalyzer,
+            logger: logger);
+
         monitorService.TelemetryUpdated += (sender, snapshot) =>
         {
             try
             {
-                // Record snapshot to SQLite asynchronously
-                _ = repository.StoreSnapshotAsync(snapshot);
-
-                // Print clean summary to console
                 RenderSnapshot(snapshot);
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"Error processing snapshot: {ex.Message}");
+                // Ignore transient format exceptions during quick screen refreshes
             }
         };
 
         try
         {
-            await monitorService.StartMonitoringAsync(cancellationTokenSource.Token);
+            await monitorService.StartAsync(cancellationTokenSource.Token);
+
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("[Status] Telemetry polling active (1 Hz interval).");
-            Console.WriteLine("Press 'Q' to exit, 'D' to run diagnostics, 'H' for hardware list.");
+            Console.WriteLine("[Status] Telemetry polling active (1000ms interval).");
+            Console.WriteLine("Controls: Press 'H' for Hardware List, 'D' for Diagnostics, 'Q' to Quit.");
             Console.ResetColor();
+            Console.WriteLine();
 
             while (!cancellationTokenSource.IsCancellationRequested)
             {
@@ -97,84 +110,130 @@ public class Program
                     var key = Console.ReadKey(true);
                     if (key.Key == ConsoleKey.Q)
                     {
-                        Console.WriteLine("\nStopping telemetry...");
+                        Console.WriteLine("\n\nStopping telemetry...");
                         cancellationTokenSource.Cancel();
                         break;
                     }
                     else if (key.Key == ConsoleKey.H)
                     {
-                        PrintHardwareList(monitorService);
+                        PrintHardwareList(monitorService.CurrentSnapshot);
                     }
                     else if (key.Key == ConsoleKey.D)
                     {
-                        var snap = monitorService.GetLatestSnapshot();
-                        if (snap != null)
-                        {
-                            var report = trendAnalyzer.EvaluateHealth(snap);
-                            Console.ForegroundColor = report.OverallState switch
-                            {
-                                HealthState.Normal => ConsoleColor.Green,
-                                HealthState.Warning => ConsoleColor.Yellow,
-                                _ => ConsoleColor.Red
-                            };
-                            Console.WriteLine($"\n--- DIAGNOSTIC DIGEST [{report.OverallState}] ---");
-                            Console.WriteLine(report.Summary);
-                            foreach (var alert in report.Alerts)
-                            {
-                                Console.WriteLine($" - [{alert.Severity}] {alert.Message}");
-                            }
-                            Console.ResetColor();
-                        }
+                        PrintDiagnosticDigest(monitorService.CurrentSnapshot);
                     }
                 }
-                await Task.Delay(100);
+                await Task.Delay(100, cancellationTokenSource.Token).ConfigureAwait(false);
             }
+        }
+        catch (OperationCanceledException)
+        {
+            // Clean exit
         }
         catch (Exception ex)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Monitoring error: {ex.Message}");
+            Console.WriteLine($"\n[Error] Monitoring error: {ex.Message}");
             Console.ResetColor();
         }
         finally
         {
-            await monitorService.StopMonitoringAsync();
+            await monitorService.StopAsync();
             monitorService.Dispose();
-            Console.WriteLine("PC Sentinel CLI closed safely.");
+            writer.Dispose();
+            repository.Dispose();
+            Console.WriteLine("\nPC Sentinel CLI closed safely.");
         }
     }
 
-    private static void RenderSnapshot(SensorSnapshot snapshot)
+    private static void RenderSnapshot(HardwareSnapshot snapshot)
     {
-        var cpuSensors = snapshot.Sensors.Where(s => s.HardwareType == HardwareType.Cpu).ToList();
-        var gpuSensors = snapshot.Sensors.Where(s => s.HardwareType == HardwareType.GpuNvidia || s.HardwareType == HardwareType.GpuAmd || s.HardwareType == HardwareType.GpuIntel).ToList();
-        var memorySensors = snapshot.Sensors.Where(s => s.HardwareType == HardwareType.Memory).ToList();
+        var cpuSensors = snapshot.Cpu?.Sensors ?? Array.Empty<Sensor>();
+        var gpuSensors = snapshot.Gpu?.Sensors ?? Array.Empty<Sensor>();
+        var memorySensors = snapshot.Memory?.Sensors ?? Array.Empty<Sensor>();
 
-        var cpuTemp = cpuSensors.FirstOrDefault(s => s.SensorType == SensorType.Temperature && (s.SensorName.Contains("Package") || s.SensorName.Contains("Core Max") || s.SensorName.Contains("Tdie")))?
-            .FormattedValue ?? "N/A";
-        var cpuLoad = cpuSensors.FirstOrDefault(s => s.SensorType == SensorType.Load && s.SensorName.Contains("Total"))?
-            .FormattedValue ?? "N/A";
+        var cpuTemp = cpuSensors.FirstOrDefault(s => s.SensorType == SensorType.Temperature && (s.SensorName.Contains("Package", StringComparison.OrdinalIgnoreCase) || s.SensorName.Contains("Core Max", StringComparison.OrdinalIgnoreCase) || s.SensorName.Contains("Tdie", StringComparison.OrdinalIgnoreCase)))?
+            .FormattedValue ?? cpuSensors.FirstOrDefault(s => s.SensorType == SensorType.Temperature)?.FormattedValue ?? "—";
 
-        var gpuTemp = gpuSensors.FirstOrDefault(s => s.SensorType == SensorType.Temperature && (s.SensorName.Contains("Core") || s.SensorName.Contains("GPU")))?
-            .FormattedValue ?? "N/A";
-        var gpuLoad = gpuSensors.FirstOrDefault(s => s.SensorType == SensorType.Load && (s.SensorName.Contains("Core") || s.SensorName.Contains("GPU")))?
-            .FormattedValue ?? "N/A";
+        var cpuLoad = cpuSensors.FirstOrDefault(s => s.SensorType == SensorType.Load && s.SensorName.Contains("Total", StringComparison.OrdinalIgnoreCase))?
+            .FormattedValue ?? cpuSensors.FirstOrDefault(s => s.SensorType == SensorType.Load)?.FormattedValue ?? "—";
 
-        var ramLoad = memorySensors.FirstOrDefault(s => s.SensorType == SensorType.Load && s.SensorName.Contains("Memory"))?
-            .FormattedValue ?? "N/A";
+        var gpuTemp = gpuSensors.FirstOrDefault(s => s.SensorType == SensorType.Temperature && (s.SensorName.Contains("Core", StringComparison.OrdinalIgnoreCase) || s.SensorName.Contains("GPU", StringComparison.OrdinalIgnoreCase)))?
+            .FormattedValue ?? "—";
 
-        Console.Write($"\r[{snapshot.Timestamp:HH:mm:ss}] CPU: {cpuLoad,6} @ {cpuTemp,6} | GPU: {gpuLoad,6} @ {gpuTemp,6} | RAM: {ramLoad,6} | Total Sensors: {snapshot.Sensors.Count,-3}  ");
+        var gpuLoad = gpuSensors.FirstOrDefault(s => s.SensorType == SensorType.Load && (s.SensorName.Contains("Core", StringComparison.OrdinalIgnoreCase) || s.SensorName.Contains("GPU", StringComparison.OrdinalIgnoreCase)))?
+            .FormattedValue ?? "—";
+
+        var ramLoad = memorySensors.FirstOrDefault(s => s.SensorType == SensorType.Load && s.SensorName.Contains("Memory", StringComparison.OrdinalIgnoreCase))?
+            .FormattedValue ?? memorySensors.FirstOrDefault(s => s.SensorType == SensorType.Load)?.FormattedValue ?? "—";
+
+        int totalSensors = snapshot.AllSensors.Count();
+        Console.Write($"\r[{snapshot.Timestamp:HH:mm:ss}] CPU: {cpuLoad,6} @ {cpuTemp,6} | GPU: {gpuLoad,6} @ {gpuTemp,6} | RAM: {ramLoad,6} | Sensors: {totalSensors,-3}  ");
     }
 
-    private static void PrintHardwareList(HardwareMonitorService monitorService)
+    private static void PrintHardwareList(HardwareSnapshot? snapshot)
     {
-        Console.WriteLine("\n\n--- DETECTED HARDWARE DEVICES ---");
-        var items = monitorService.GetHardwareItems();
-        foreach (var item in items)
+        Console.WriteLine("\n\n==================== DETECTED HARDWARE DEVICES ====================");
+        if (snapshot != null && snapshot.Hardware.Count > 0)
         {
-            Console.WriteLine($" • [{item.HardwareType}] {item.Name} ({item.Sensors.Count} sensors)");
+            foreach (var item in snapshot.Hardware)
+            {
+                Console.WriteLine($" • [{item.Type,-11}] {item.Name} ({item.Sensors.Count} sensors)");
+                foreach (var sensor in item.Sensors.Take(4))
+                {
+                    Console.WriteLine($"     - {sensor.SensorName,-24} : {sensor.FormattedValue}");
+                }
+                if (item.Sensors.Count > 4)
+                {
+                    Console.WriteLine($"     ... + {item.Sensors.Count - 4} more sensors");
+                }
+            }
         }
-        Console.WriteLine("--------------------------------\n");
+        else
+        {
+            Console.WriteLine(" (Waiting for first hardware snapshot...)");
+        }
+        Console.WriteLine("===================================================================\n");
+    }
+
+    private static void PrintDiagnosticDigest(HardwareSnapshot? snapshot)
+    {
+        if (snapshot == null)
+        {
+            Console.WriteLine("\n[Diagnostics] Telemetry snapshot not ready yet.");
+            return;
+        }
+
+        var health = SystemHealthState.Evaluate(snapshot);
+        Console.ForegroundColor = health.OverallSeverity switch
+        {
+            HealthSeverity.Normal => ConsoleColor.Green,
+            HealthSeverity.Elevated => ConsoleColor.Cyan,
+            HealthSeverity.Warning => ConsoleColor.Yellow,
+            _ => ConsoleColor.Red
+        };
+
+        Console.WriteLine($"\n\n================ DIAGNOSTIC HEALTH CHECK [{health.OverallSeverity}] ================");
+        Console.WriteLine($" Machine: {snapshot.MachineName} | OS: {snapshot.OsVersion}");
+        Console.WriteLine($" Elevation: {(snapshot.IsElevated ? "Administrator (Full Ring-0 Access)" : "Standard User")}");
+        Console.WriteLine($" CPU Load: {health.CpuTotalLoad?.ToString("0.#") ?? "—"}% | CPU Max Temp: {health.CpuMaxTemperature?.ToString("0.#") ?? "—"}°C");
+        Console.WriteLine($" GPU Max Temp: {health.GpuMaxTemperature?.ToString("0.#") ?? "—"}°C | RAM Utilization: {health.MemoryUtilization?.ToString("0.#") ?? "—"}%");
+        Console.WriteLine("-------------------------------------------------------------------");
+
+        if (health.HealthNotices.Count > 0)
+        {
+            Console.WriteLine(" Notices:");
+            foreach (var notice in health.HealthNotices)
+            {
+                Console.WriteLine($"   ! {notice}");
+            }
+        }
+        else
+        {
+            Console.WriteLine(" Status: All monitored sensors operating within nominal safe limits.");
+        }
+        Console.WriteLine("===================================================================\n");
+        Console.ResetColor();
     }
 
     private static bool IsAdministrator()
@@ -182,8 +241,15 @@ public class Program
         if (!OperatingSystem.IsWindows())
             return false;
 
-        using var identity = WindowsIdentity.GetCurrent();
-        var principal = new WindowsPrincipal(identity);
-        return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        try
+        {
+            using var identity = WindowsIdentity.GetCurrent();
+            var principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
